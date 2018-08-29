@@ -1,0 +1,8 @@
+*md.txt*
+
+Author: Conor Newton
+Maintainer: Conor Newton (conornewton@gmail.com)
+Last Change: 2018-08-29
+Homepage: https://www.github.com/conornewton/vim-pandoc-markdown-viewer#readme
+Git Repo: https://www.github.com/conornewton/vim-pandoc-markdown-viewer
+Description: A preview plugin for pandoc markdown

@@ -10,13 +10,14 @@ endif
 
 
 function! s:CompileMd()
-    execute "silent !pandoc % -o %:r.pdf && pkill -HUP mupdf"
+    execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
     redraw!
 endfunction
 
 function! s:OpenPdf(pdf_viewer)
     call s:CompileMd()
-    execute "silent !" .a:pdf_viewer. " %:r.pdf &"
+    execute "silent !" .a:pdf_viewer. " %:r.pdf &> /dev/null &"
+    redraw!
 endfunction
 
 

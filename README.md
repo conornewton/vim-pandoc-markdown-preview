@@ -1,7 +1,6 @@
 # Vim Pandoc Markdown Previewer
 
-## Example
-
+![alt text](https://www.github.com/conornewton/vim-pandoc-markdown-preview/preview.gif "Preview")
 
 ## Dependencies
 

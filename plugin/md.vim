@@ -9,19 +9,17 @@ else
 endif
 
 
-function! s:CompileMd()
-    execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
+function! s:CompileMd(pdf_viewer)
+    execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP " . a:pdf_viewer . " &> /dev/null"
     redraw!
 endfunction
 
 function! s:OpenPdf(pdf_viewer)
-    call s:CompileMd()
+    call s:CompileMd(pdf_viewer)
     execute "silent !" .a:pdf_viewer. " %:r.pdf &> /dev/null &"
     redraw!
 endfunction
 
 
-" every time we save compile
-autocmd BufWritePost *.md call s:CompileMd()
-
+autocmd BufWritePost *.md call s:CompileMd(s:pdf_viewer)
 command! StartMdPreview call s:OpenPdf(s:pdf_viewer)

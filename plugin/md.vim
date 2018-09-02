@@ -10,7 +10,7 @@ endif
 
 
 function! s:CompileMd(pdf_viewer)
-    execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP " . a:pdf_viewer . " &> /dev/null"
+    execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
     redraw!
 endfunction
 

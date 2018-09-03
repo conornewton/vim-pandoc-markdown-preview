@@ -7,7 +7,7 @@
 * vim
 * pandoc
 * a pdf viewer:
-    * Evince
+    * Evince (Works on Mac)
     * Mupdf (My personal favourite)
     * Okular
 

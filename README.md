@@ -8,8 +8,13 @@
 * pandoc
 * a pdf viewer:
     * Evince (Works on Mac)
-    * Mupdf (My personal favourite)
+    * Mupdf
     * Okular
+
+For async support (Compiling in background)
+
+* vim version >= 8.00
+* [asyncrun.vim](https://github.com/skywind3000/asyncrun.vim)
 
 ## Installation
 

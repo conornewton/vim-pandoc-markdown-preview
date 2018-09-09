@@ -8,9 +8,24 @@ else
     endfor
 endif
 
+if (!exists('s:pdf_viewer'))
+    echoh1 ErrorMsg
+    echo "could not find valid pdf viewer"
+    echoh1 None
+    finish
+endif
+
+if exists(':AsyncRun') && v:version >= 800
+    let s:async_support = 1
+endif
+
 
 function! s:CompileMd()
-    execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
+    if exists('s:async_support')
+        :AsyncRun pandoc "%" -o "%<".pdf && pkill -HUP mupdf
+    else
+        execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
+    endif
     redraw!
 endfunction
 

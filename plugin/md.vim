@@ -10,6 +10,12 @@ else
     endfor
 endif
 
+if exists('g:md_pdf_engine')
+    let s:pdf_engine = g:md_pdf_engine
+else
+    let s:pdf_engine = "pdflatex"
+endif
+
 if (!exists('s:pdf_viewer'))
     echoh1 ErrorMsg
     echo "could not find valid pdf viewer"
@@ -26,9 +32,9 @@ function! s:CompileMd()
     " Only compile when the preview is enabled
     if (s:preview_running == 1)
         if exists('s:async_support')
-            :AsyncRun pandoc "%" -o "%<".pdf && pkill -HUP mupdf
+            execute "AsyncRun pandoc --pdf-engine=" .s:pdf_engine. " % -o %<.pdf && pkill -HUP mupdf"
         else
-            execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
+            execute "silent !pandoc --pdf-engine=" .s:pdf_engine. " % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
         endif
     endif
     redraw!

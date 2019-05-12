@@ -47,7 +47,9 @@ function! s:CompileMd()
 endfunction
 
 function! s:OpenPdf(pdf_viewer)
-    call s:CompileMd()
+    " A synchronous (locking up) call is necessary here. Otherwise the pdf viewer will open before 
+    " the file has been compiled, hence finding nothing to display.
+    execute "silent !pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine. " % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
     execute "silent !" .a:pdf_viewer. " %:r.pdf &> /dev/null &"
     redraw!
 endfunction

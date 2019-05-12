@@ -1,3 +1,5 @@
+let s:preview_running = 0
+
 if exists('g:md_pdf_viewer')
     let s:pdf_viewer = g:md_pdf_viewer
 else 
@@ -21,10 +23,13 @@ endif
 
 
 function! s:CompileMd()
-    if exists('s:async_support')
-        :AsyncRun pandoc "%" -o "%<".pdf && pkill -HUP mupdf
-    else
-        execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
+    " Only compile when the preview is enabled
+    if (s:preview_running == 1)
+        if exists('s:async_support')
+            :AsyncRun pandoc "%" -o "%<".pdf && pkill -HUP mupdf
+        else
+            execute "silent !pandoc % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
+        endif
     endif
     redraw!
 endfunction
@@ -35,6 +40,13 @@ function! s:OpenPdf(pdf_viewer)
     redraw!
 endfunction
 
+function! s:StartPreview(pdf_viewer)
+    let s:preview_running = 1
+    call s:OpenPdf(a:pdf_viewer)
+endfunction
+
 
 autocmd BufWritePost *.md call s:CompileMd()
-command! StartMdPreview call s:OpenPdf(s:pdf_viewer)
+command! -nargs=? StartMdPreview call s:StartPreview(s:pdf_viewer)
+command! StopMdPreview let s:preview_running = 0
+

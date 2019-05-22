@@ -30,12 +30,54 @@ To start the preview mode:
 ```
 This will compile your markdown document and open it in one of the above pdf viewers.
 
-After every save the previewer will be refreshed.
+If the preview is currently running every save will recompile the document and the previewer will
+be refreshed.
+
+To stop the preview mode:
+```
+:StopMdPreview
+```
+
+Once the preview is stopped the document won't be automatically compiled when saved.
+
 
 ### Choosing a previewer
 
-Stick the following in your vimrc, replacing <previewer> with the name of your preferred pdf viewer.
+Stick the following in your vimrc, replacing `<previewer>` with the name of your preferred pdf viewer.
 
 ```
 let g:md_pdf_viewer="<previewer>"
+```
+
+### Choosing a pdf engine
+
+Pandoc supports several pdf engines for document compilation. You can choose your preferred engine
+like so:
+
+```
+let g:md_pdf_engine="<engine>"
+```
+
+The default engine is _pdflatex_.
+
+You can read more about pdf engines in the [Pandoc
+manpage](https://manpages.debian.org/testing/pandoc/pandoc.1.en.html)
+
+### Choosing a latex class
+
+Pandoc uses latex to compile pdfs. The default class _latex_ will produce a A4/Letter pdf. You may
+use any of the keywords supported by Pandoc. However, the preview will only work with those
+compiling to pdf, like _beamer_.
+
+Choose your preferred latex class like so:
+
+```
+let g:md_default_latex_class="<class>"
+```
+
+The default class is _latex_.
+
+You can list all available formats by running 
+```
+pandoc --list-output-formats
 ```

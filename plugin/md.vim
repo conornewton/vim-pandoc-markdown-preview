@@ -33,6 +33,9 @@ if exists(':AsyncRun') && v:version >= 800
     let s:async_support = 1
 endif
 
+function! s:CompileSynchronous()
+    execute "silent !pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine shellescape("%") "-o" shellescape("%<.pdf") "&>/dev/null && pkill -HUP mupdf &> /dev/null"
+endfunction
 
 function! s:CompileMd()
     " Only compile when the preview is enabled
@@ -40,7 +43,7 @@ function! s:CompileMd()
         if exists('s:async_support')
             execute "AsyncRun pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine. " % -o %<.pdf && pkill -HUP mupdf"
         else
-            execute "silent !pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine. " % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
+            call s:CompileSynchronous()
         endif
     endif
     redraw!
@@ -49,8 +52,8 @@ endfunction
 function! s:OpenPdf(pdf_viewer)
     " A synchronous (locking up) call is necessary here. Otherwise the pdf viewer will open before 
     " the file has been compiled, hence finding nothing to display.
-    execute "silent !pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine. " % -o %:r.pdf &>/dev/null && pkill -HUP mupdf &> /dev/null"
-    execute "silent !" .a:pdf_viewer. " %:r.pdf &> /dev/null &"
+    call s:CompileSynchronous()
+    execute "silent !" .a:pdf_viewer shellescape("%<.pdf") "&> /dev/null &"
     redraw!
 endfunction
 

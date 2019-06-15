@@ -59,4 +59,4 @@ You can make use of the _g:md_args_ variable in to pass arguments to pandoc. For
 let g:md_args = "--template eisvogel --listings"
 ```
 
-This compiles markdown using the [eisvogel](https://github.com/Wandmalfarbe/pandoc-latex### Passing arguments to pandoc
+This compiles markdown using the [eisvogel](https://github.com/Wandmalfarbe/pandoc-latex

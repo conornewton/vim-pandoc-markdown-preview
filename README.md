@@ -10,6 +10,7 @@
     * Evince (Works on Mac)
     * Mupdf
     * Okular
+many other pdf readers should work, above is a list of them I have tested
 
 For async support (Compiling in background)
 
@@ -63,6 +64,8 @@ The default engine is _pdflatex_.
 You can read more about pdf engines in the [Pandoc
 manpage](https://manpages.debian.org/testing/pandoc/pandoc.1.en.html)
 
+This compiles markdown using the [eisvogel](https://github.com/Wandmalfarbe/pandoc-latex-template) templates.
+
 ### Choosing a latex class
 
 Pandoc uses latex to compile pdfs. The default class _latex_ will produce a A4/Letter pdf. You may
@@ -81,3 +84,12 @@ You can list all available formats by running
 ```
 pandoc --list-output-formats
 ```
+
+### Passing arguments to pandoc
+
+You can make use of the _g:md_args_ variable in your vimrc to pass arguments to pandoc. You can also use this to set the document class and pdf engine instead of the method shown above. For example, taken from my vimrc.
+
+```
+let g:md_args = "--template eisvogel --listings"
+```
+

@@ -22,6 +22,12 @@ else
     let s:latex_class = 'latex'
 endif
 
+if exists('g:md_args')
+    let s:args = g:md_args
+else
+    let s:args = ""
+end
+
 if (!exists('s:pdf_viewer'))
     echoh1 ErrorMsg
     echo "could not find valid pdf viewer"
@@ -34,14 +40,18 @@ if exists(':AsyncRun') && v:version >= 800
 endif
 
 function! s:CompileSynchronous()
-    execute "silent !pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine shellescape("%") "-o" shellescape("%<.pdf") "&>/dev/null && pkill -HUP mupdf &> /dev/null"
+    execute "silent !pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine. " ".s:args. shellescape("%") "-o" shellescape("%<.pdf") "&>/dev/null && pkill -HUP mupdf &> /dev/null"
+endfunction
+
+function! s:CompileAsynchronous()
+            execute "AsyncRun pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine. " " . s:args. " % -o %<.pdf && pkill -HUP mupdf"
 endfunction
 
 function! s:CompileMd()
     " Only compile when the preview is enabled
     if (s:preview_running == 1)
         if exists('s:async_support')
-            execute "AsyncRun pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine. " % -o %<.pdf && pkill -HUP mupdf"
+            call s:CompileAsynchronous()
         else
             call s:CompileSynchronous()
         endif
@@ -62,7 +72,6 @@ function! s:StartPreview(pdf_viewer, latex_class)
     if (a:latex_class != "")
         let s:latex_class = a:latex_class
     endif
-
     let s:preview_running = 1
     call s:OpenPdf(a:pdf_viewer)
 endfunction

@@ -10,18 +10,6 @@ else
     endfor
 endif
 
-if exists('g:md_pdf_engine')
-    let s:pdf_engine = g:md_pdf_engine
-else
-    let s:pdf_engine = "pdflatex"
-endif
-
-if exists('g:md_default_latex_class')
-    let s:latex_class = g:md_default_latex_class
-else
-    let s:latex_class = 'latex'
-endif
-
 if exists('g:md_args')
     let s:args = g:md_args
 else
@@ -40,11 +28,11 @@ if exists(':AsyncRun') && v:version >= 800
 endif
 
 function! s:CompileSynchronous()
-    execute "silent !pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine. " ".s:args. shellescape("%") "-o" shellescape("%<.pdf") "&>/dev/null && pkill -HUP mupdf &> /dev/null"
+    execute "silent !pandoc " .s:args. " " . shellescape("%") "-o" shellescape("%<.pdf") "&>/dev/null && pkill -HUP mupdf &> /dev/null"
 endfunction
 
 function! s:CompileAsynchronous()
-            execute "AsyncRun pandoc -t " .s:latex_class. " --pdf-engine=" .s:pdf_engine. " " . s:args. " % -o %<.pdf && pkill -HUP mupdf"
+    execute "AsyncRun pandoc " . s:args. " % -o %<.pdf && pkill -HUP mupdf"
 endfunction
 
 function! s:CompileMd()
@@ -67,17 +55,13 @@ function! s:OpenPdf(pdf_viewer)
     redraw!
 endfunction
 
-function! s:StartPreview(pdf_viewer, latex_class)
-    " Latex is always default unless specified in the call or in .vimrc
-    if (a:latex_class != "")
-        let s:latex_class = a:latex_class
-    endif
+function! s:StartPreview(pdf_viewer)
     let s:preview_running = 1
     call s:OpenPdf(a:pdf_viewer)
 endfunction
 
 
 autocmd BufWritePost *.md call s:CompileMd()
-command! -nargs=? StartMdPreview call s:StartPreview(s:pdf_viewer, "<args>")
+command! StartMdPreview call s:StartPreview(s:pdf_viewer)
 command! StopMdPreview let s:preview_running = 0
 

@@ -53,7 +53,7 @@ let g:md_pdf_viewer="<previewer>"
 
 ### Passing arguments to pandoc
 
-You can make use of the `g:md_arg`_ variable to pass arguments to pandoc. For example, taken from my vimrc.
+You can make use of the `g:md_arg` variable to pass arguments to pandoc. For example, taken from my vimrc.
 
 ```
 let g:md_args = "--template eisvogel --listings"

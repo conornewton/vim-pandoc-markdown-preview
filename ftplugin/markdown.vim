@@ -28,11 +28,11 @@ if exists(':AsyncRun') && v:version >= 800
 endif
 
 function! s:CompileSynchronous()
-    execute "silent !pandoc " .s:args. " --resource-path=". expand('%:h') . " " . shellescape("%") "-o" shellescape("%<.pdf") " && pkill -HUP mupdf &> /dev/null"
+    execute "silent !pandoc " .s:args. " --resource-path=". shellescape('%:h') . " " . shellescape("%") "-o" shellescape("%<.pdf") " &>".  shellesacpe('%:h') ."/.pandoc-preview.logs && pkill -HUP mupdf &> /dev/null"
 endfunction
 
 function! s:CompileAsynchronous()
-    execute "AsyncRun pandoc " . s:args. " --resource-path=". expand('%:h') . " % -o %<.pdf &>".  expand('%:h') ."pandoc-preview.logs && pkill -HUP mupdf"
+    execute "AsyncRun pandoc " . s:args. " --resource-path=". shellescape('%:h') . " % -o %<.pdf &>".  shellesacpe('%:h') ."/.pandoc-preview.logs && pkill -HUP mupdf"
 endfunction
 
 function! s:CompileMd()
